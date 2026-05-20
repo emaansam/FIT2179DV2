@@ -1,0 +1,119 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 900,
+  "height": 650,
+  "data": {
+    "values": [
+      {"School": "Ballarat Clarendon College", "Rank2024": 1, "Rank2025": 1},
+      {
+        "School": "MacRobertson Girls High School",
+        "Rank2024": 3,
+        "Rank2025": 2
+      },
+      {"School": "Bacchus Marsh Grammar", "Rank2024": 66, "Rank2025": 3},
+      {"School": "Nossal High School", "Rank2024": 12, "Rank2025": 4},
+      {"School": "Haileybury College (Girls)", "Rank2024": 7, "Rank2025": 5},
+      {"School": "Ruyton Girls' School", "Rank2024": 6, "Rank2025": 6},
+      {"School": "Melbourne Girls Grammar", "Rank2024": 9, "Rank2025": 7},
+      {"School": "Melbourne High School", "Rank2024": 10, "Rank2025": 8},
+      {"School": "Melbourne Grammar School", "Rank2024": 11, "Rank2025": 9},
+      {"School": "Huntingover School", "Rank2024": 2, "Rank2025": 10},
+      {
+        "School": "Camberwell Girls Grammar School",
+        "Rank2024": 19,
+        "Rank2025": 11
+      },
+      {"School": "Fintona Girls School", "Rank2024": 13, "Rank2025": 12},
+      {"School": "Haileybury College", "Rank2024": 15, "Rank2025": 13},
+      {
+        "School": "Mount Scopus Memorial College",
+        "Rank2024": 4,
+        "Rank2025": 14
+      },
+      {"School": "Suzanne Cory High School", "Rank2024": 44, "Rank2025": 15},
+      {"School": "Bialik College", "Rank2024": 8, "Rank2025": 16},
+      {"School": "Loreto Mandevile Hall", "Rank2024": 14, "Rank2025": 17},
+      {
+        "School": "Korowa Anglican Girls' School",
+        "Rank2024": 33,
+        "Rank2025": 18
+      },
+      {"School": "Leibler Yevneh College", "Rank2024": 23, "Rank2025": 19},
+      {
+        "School": "Presbyterian Ladies' College",
+        "Rank2024": 17,
+        "Rank2025": 20
+      },
+      {"School": "Yarra Valley Grammar School", "Rank2024": 35, "Rank2025": 21},
+      {"School": "St Kevin's College", "Rank2024": 22, "Rank2025": 22},
+      {"School": "Methodist Ladies College", "Rank2024": 27, "Rank2025": 23},
+      {"School": "Firbank Grammar School", "Rank2024": 34, "Rank2025": 24},
+      {"School": "Lauriston Girl's School", "Rank2024": 38, "Rank2025": 25}
+    ]
+  },
+  "transform": [
+    {"calculate": "datum.Rank2025 - datum.Rank2024", "as": "RankChange"},
+    {
+      "calculate": "datum.RankChange < 0 ? 'Moved up ' + (-datum.RankChange) + ' ranks' : datum.RankChange > 0 ? 'Dropped ' + datum.RankChange + ' ranks' : 'No change'",
+      "as": "MovementText"
+    },
+    {
+      "calculate": "datum.RankChange == 0 ? 'No change' : ''",
+      "as": "OnPlotLabel"
+    }
+  ],
+  "encoding": {
+    "y": {
+      "field": "School",
+      "type": "nominal",
+      "sort": {"field": "RankChange", "order": "ascending"},
+      "title": "School"
+    },
+    "x": {
+      "field": "RankChange",
+      "type": "quantitative",
+      "title": "Rank Change",
+      "scale": {"domain": [-70, 70]}
+    }
+  },
+  "layer": [
+    {
+      "mark": {"type": "bar"},
+      "encoding": {
+        "color": {
+          "condition": [
+            {"test": "datum.RankChange < 0", "value": "#009E73"},
+            {"test": "datum.RankChange > 0", "value": "#CC7987"},
+            {"test": "datum.RankChange == 0", "value": "#999999"}
+          ],
+          "value": "#999999"
+        },
+        "tooltip": [
+          {"field": "School", "title": "School"},
+          {"field": "Rank2024", "title": "Rank 2024"},
+          {"field": "Rank2025", "title": "Rank 2025"},
+          {"field": "MovementText", "title": "Change"}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 5,
+        "fontSize": 12,
+        "fontWeight": "bold",
+        "color": "#444444"
+      },
+      "encoding": {
+        "text": {"field": "OnPlotLabel"},
+        "opacity": {
+          "condition": {"test": "datum.OnPlotLabel != ''", "value": 1},
+          "value": 0
+        }
+      }
+    }
+  ],
+  "config": {}
+}

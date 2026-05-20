@@ -1,0 +1,131 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 900,
+  "data": {
+    "values": [
+      {
+        "School": "Ballarat Clarendon College",
+        "Score2024": 34.7,
+        "Score2025": 35
+      },
+      {
+        "School": "MacRobertson Girls High School",
+        "Score2024": 31.1,
+        "Score2025": 34.7
+      },
+      {"School": "Bacchus Marsh Grammar", "Score2024": 13.9, "Score2025": 33.3},
+      {"School": "Nossal High School", "Score2024": 27.6, "Score2025": 32.4},
+      {
+        "School": "Haileybury College (Girls)",
+        "Score2024": 29.9,
+        "Score2025": 31.2
+      },
+      {"School": "Ruyton Girls' School", "Score2024": 30.2, "Score2025": 30.9},
+      {
+        "School": "Melbourne Girls Grammar",
+        "Score2024": 28.7,
+        "Score2025": 30.4
+      },
+      {"School": "Melbourne High School", "Score2024": 28.5, "Score2025": 29.9},
+      {
+        "School": "Melbourne Grammar School",
+        "Score2024": 28,
+        "Score2025": 29.3
+      },
+      {"School": "Huntingover School", "Score2024": 31.7, "Score2025": 27.7},
+      {
+        "School": "Camberwell Girls Grammar School",
+        "Score2024": 25.2,
+        "Score2025": 27.5
+      },
+      {"School": "Fintona Girls School", "Score2024": 26.4, "Score2025": 26.8},
+      {"School": "Haileybury College", "Score2024": 26.3, "Score2025": 26.5},
+      {
+        "School": "Mount Scopus Memorial College",
+        "Score2024": 30.8,
+        "Score2025": 25.5
+      },
+      {"School": "Suzanne Cory High School", "Score2024": 19, "Score2025": 25},
+      {"School": "Bialik College", "Score2024": 29.7, "Score2025": 24.8},
+      {"School": "Loreto Mandevile Hall", "Score2024": 26.4, "Score2025": 24.7},
+      {
+        "School": "Korowa Anglican Girls' School",
+        "Score2024": 21.2,
+        "Score2025": 24.5
+      },
+      {
+        "School": "Leibler Yevneh College",
+        "Score2024": 23.6,
+        "Score2025": 24.1
+      },
+      {
+        "School": "Presbyterian Ladies' College",
+        "Score2024": 25.9,
+        "Score2025": 24.1
+      },
+      {
+        "School": "Yarra Valley Grammar School",
+        "Score2024": 21,
+        "Score2025": 23.8
+      },
+      {"School": "St Kevin's College", "Score2024": 23.7, "Score2025": 23.6},
+      {
+        "School": "Methodist Ladies College",
+        "Score2024": 22.5,
+        "Score2025": 23.2
+      },
+      {"School": "Firbank Grammar School", "Score2024": 19.2, "Score2025": 23},
+      {
+        "School": "Lauriston Girl's School",
+        "Score2024": 20.3,
+        "Score2025": 22.9
+      }
+    ]
+  },
+  "transform": [
+    {"fold": ["Score2024", "Score2025"], "as": ["Year", "Score"]},
+    {
+      "calculate": "datum.Year == 'Score2024' ? '2024' : '2025'",
+      "as": "YearLabel"
+    }
+  ],
+  "encoding": {
+    "y": {
+      "field": "School",
+      "type": "nominal",
+      "sort": {"field": "Score2025", "order": "descending"}
+    },
+    "x": {
+      "field": "Score",
+      "type": "quantitative",
+      "title": "Percentage of 40+ Study Scores",
+      "scale": {"domain": [10, 40]}
+    }
+  },
+  "layer": [
+    {
+      "mark": {"type": "rule", "strokeWidth": 2, "color": "#444444"},
+      "encoding": {"x": {"field": "Score2024"}, "x2": {"field": "Score2025"}}
+    },
+    {
+      "mark": {"type": "point", "filled": true, "size": 70},
+      "encoding": {
+        "color": {
+          "field": "YearLabel",
+          "type": "nominal",
+          "scale": {
+            "domain": ["2024", "2025"],
+            "range": ["#E69F00", "#0072B2"]
+          },
+          "title": "Year"
+        },
+        "tooltip": [
+          {"field": "School", "title": "School"},
+          {"field": "YearLabel", "title": "Year"},
+          {"field": "Score", "title": "Percentage", "format": ".1f"}
+        ]
+      }
+    }
+  ],
+  "config": {}
+}
